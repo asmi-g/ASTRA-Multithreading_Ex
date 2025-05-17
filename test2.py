@@ -14,8 +14,8 @@ import csv
 
 
 DATA_DIR = "Data/"
-TX_SCRIPT = "tx_flowgraph.py"
-RX_SCRIPT = "rx_flowgraph.py"
+TX_SCRIPT = "TX.py"
+RX_SCRIPT = "RX.py"
 
 def install_requirements():
     try:
