@@ -51,6 +51,7 @@ class TX(gr.top_block):
         self.soapy_hackrf_sink_0.set_frequency(0, center_freq)
         self.soapy_hackrf_sink_0.set_gain(0, 'AMP', False)
         self.soapy_hackrf_sink_0.set_gain(0, 'VGA', min(max(25, 0.0), 47.0))
+        self.blocks_head_0 = blocks.head(gr.sizeof_gr_complex*1, 50000000)
         self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, 'txdata.dat', False)
         self.blocks_file_sink_0.set_unbuffered(False)
         self.analog_sig_source_x_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, 100000, 1, 0, 0)
@@ -59,8 +60,9 @@ class TX(gr.top_block):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.analog_sig_source_x_0, 0), (self.blocks_file_sink_0, 0))
-        self.connect((self.analog_sig_source_x_0, 0), (self.soapy_hackrf_sink_0, 0))
+        self.connect((self.analog_sig_source_x_0, 0), (self.blocks_head_0, 0))
+        self.connect((self.blocks_head_0, 0), (self.blocks_file_sink_0, 0))
+        self.connect((self.blocks_head_0, 0), (self.soapy_hackrf_sink_0, 0))
 
 
     def get_samp_rate(self):
