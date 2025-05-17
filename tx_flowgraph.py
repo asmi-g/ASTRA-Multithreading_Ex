@@ -22,6 +22,7 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import soapy
+import sip
 
 
 
@@ -80,6 +81,24 @@ class TX(gr.top_block, Qt.QWidget):
         self.soapy_hackrf_sink_0.set_frequency(0, center_freq)
         self.soapy_hackrf_sink_0.set_gain(0, 'AMP', False)
         self.soapy_hackrf_sink_0.set_gain(0, 'VGA', min(max(25, 0.0), 47.0))
+        self.qtgui_sink_x_0 = qtgui.sink_c(
+            1024, #fftsize
+            window.WIN_BLACKMAN_hARRIS, #wintype
+            0, #fc
+            samp_rate, #bw
+            "", #name
+            True, #plotfreq
+            True, #plotwaterfall
+            True, #plottime
+            True, #plotconst
+            None # parent
+        )
+        self.qtgui_sink_x_0.set_update_time(1.0/10)
+        self._qtgui_sink_x_0_win = sip.wrapinstance(self.qtgui_sink_x_0.qwidget(), Qt.QWidget)
+
+        self.qtgui_sink_x_0.enable_rf_freq(False)
+
+        self.top_layout.addWidget(self._qtgui_sink_x_0_win)
         self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, 'C:\\Users\\asmig\\OneDrive\\Documents\\GNURadio\\Data\\txdata', False)
         self.blocks_file_sink_0.set_unbuffered(False)
         self.analog_sig_source_x_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, 100000, 1, 0, 0)
@@ -89,6 +108,7 @@ class TX(gr.top_block, Qt.QWidget):
         # Connections
         ##################################################
         self.connect((self.analog_sig_source_x_0, 0), (self.blocks_file_sink_0, 0))
+        self.connect((self.analog_sig_source_x_0, 0), (self.qtgui_sink_x_0, 0))
         self.connect((self.analog_sig_source_x_0, 0), (self.soapy_hackrf_sink_0, 0))
 
 
@@ -107,6 +127,7 @@ class TX(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self.analog_sig_source_x_0.set_sampling_freq(self.samp_rate)
         self.soapy_hackrf_sink_0.set_sample_rate(0, self.samp_rate)
+        self.qtgui_sink_x_0.set_frequency_range(0, self.samp_rate)
 
     def get_center_freq(self):
         return self.center_freq
