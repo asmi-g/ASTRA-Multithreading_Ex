@@ -14,6 +14,9 @@ RX_SCRIPT = "RX.py"
 CSV_FILE_PATH = os.path.join(DATA_DIR, "signal.csv")
 RUNTIME_SECONDS = 10  # duration to run TX/RX per cycle
 
+# TO DO
+# - Fix: "sink :warning: Soapy sink error: TIMEOUT"
+
 
 def install_requirements():
     try:
