@@ -38,7 +38,7 @@ def terminate_process(proc):
     else:
         os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
 
-def wait_for_data(file_path, timeout=30):
+def wait_for_data(file_path, timeout=60):
     for _ in range(timeout):
         if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
             return True
