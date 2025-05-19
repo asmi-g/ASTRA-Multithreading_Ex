@@ -31,7 +31,7 @@ class TX(gr.top_block):
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 10000000
+        self.samp_rate = samp_rate = 30000000
         self.center_freq = center_freq = 2400000000
 
         ##################################################
@@ -52,8 +52,8 @@ class TX(gr.top_block):
         self.soapy_hackrf_sink_0.set_gain(0, 'AMP', False)
         self.soapy_hackrf_sink_0.set_gain(0, 'VGA', min(max(25, 0.0), 47.0))
         self.blocks_head_0 = blocks.head(gr.sizeof_gr_complex*1, 50000000)
-        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, 'Data/txdata.dat', False)
-        self.blocks_file_sink_0.set_unbuffered(False)
+        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, 'txdata.dat', False)
+        self.blocks_file_sink_0.set_unbuffered(True)
         self.analog_sig_source_x_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, 100000, 1, 0, 0)
 
 
