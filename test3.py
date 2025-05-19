@@ -64,6 +64,7 @@ def cycle_once():
     print("Launching TX and RX scripts...")
     tx_proc = run_flowgraph(TX_SCRIPT)
     rx_proc = run_flowgraph(RX_SCRIPT)
+    
 
     print(f"Running for {RUNTIME_SECONDS} seconds...")
     time.sleep(RUNTIME_SECONDS)
