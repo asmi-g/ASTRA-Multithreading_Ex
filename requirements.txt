@@ -1,6 +1,5 @@
 numpy
 matplotlib
-gnuradio
 sys
 signal
 argparse 

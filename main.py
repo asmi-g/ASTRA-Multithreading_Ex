@@ -7,10 +7,13 @@ import signal
 import platform
 import numpy as np
 import csv
+import pandas as pd
+import matplotlib.pyplot as plt
+
 
 DATA_DIR = "Data/"
-TX_SCRIPT = "TX.py"
-RX_SCRIPT = "RX.py"
+TX_SCRIPT = "AM_transmit_SDR.py"
+RX_SCRIPT = "AM_receive.py"
 CSV_FILE_PATH = os.path.join(DATA_DIR, "signal.csv")
 RUNTIME_SECONDS = 10  # duration to run TX/RX per cycle
 
@@ -62,6 +65,36 @@ def save_to_csv(rx_file_path, tx_file_path, csv_file_path):
                 np.real(rx), np.imag(rx), np.abs(rx)
             ])
 
+    # Load the CSV
+    df = pd.read_csv(csv_file_path)
+
+        # --- Plot Magnitudes ---
+    plt.figure(figsize=(12, 6))
+    plt.plot(df["Index"], df["TX Magnitude"], label="TX Magnitude", color='blue')
+    plt.plot(df["Index"], df["RX Magnitude"], label="RX Magnitude", color='green', alpha=0.7)
+    plt.xlabel("Sample Index")
+    plt.ylabel("Magnitude")
+    plt.title("TX and RX Signal Magnitudes")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+    # --- Plot Real Parts ---
+    plt.figure(figsize=(12, 6))
+    plt.plot(df["Index"], df["TX Real"], label="TX Real", alpha=0.8)
+    plt.plot(df["Index"], df["RX Real"], label="RX Real", alpha=0.6)
+    plt.xlabel("Sample Index")
+    plt.ylabel("Amplitude")
+    plt.title("Real Parts of TX and RX Signals")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+    
+
+
 
 def cycle_once():
     print("Launching TX and RX scripts...")
@@ -77,8 +110,8 @@ def cycle_once():
     terminate_process(rx_proc)
 
     print("Saving to CSV...")
-    save_to_csv(os.path.join(DATA_DIR, "rxdata.dat"),
-                os.path.join(DATA_DIR, "txdata.dat"),
+    save_to_csv(os.path.join(DATA_DIR, "rxdata-mod"),
+                os.path.join(DATA_DIR, "txdata-mod"),
                 CSV_FILE_PATH)
     print("Cycle complete.\n")
 
@@ -86,9 +119,7 @@ def cycle_once():
 def main():
     install_requirements()
 
-    while True:
-        cycle_once()
-        time.sleep(2)  # Optional delay between cycles
+    cycle_once()
 
 
 if __name__ == "__main__":
