@@ -134,12 +134,11 @@ class AM_transmit_SDR(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_0_win)
-        self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_float*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
         self.blocks_repeat_1 = blocks.repeat(gr.sizeof_float*1, 16)
         self.blocks_null_source_0 = blocks.null_source(gr.sizeof_float*1)
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(0.8)
         self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
-        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, 'Data/txdata-mod.dat', False)
+        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, 'Data/txdata-mod', False)
         self.blocks_file_sink_0.set_unbuffered(True)
         self.blocks_add_const_vxx_0 = blocks.add_const_ff(1)
         self._audio_gain_range = qtgui.Range(0, 10.0, 0.1, 0.8, 200)
@@ -151,7 +150,7 @@ class AM_transmit_SDR(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.analog_sig_source_x_1, 0), (self.blocks_throttle2_0, 0))
+        self.connect((self.analog_sig_source_x_1, 0), (self.blocks_multiply_const_vxx_0, 0))
         self.connect((self.blocks_add_const_vxx_0, 0), (self.blocks_repeat_1, 0))
         self.connect((self.blocks_float_to_complex_0, 0), (self.blocks_file_sink_0, 0))
         self.connect((self.blocks_float_to_complex_0, 0), (self.soapy_hackrf_sink_0, 0))
@@ -159,7 +158,6 @@ class AM_transmit_SDR(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_multiply_const_vxx_0, 0), (self.qtgui_time_sink_x_0, 0))
         self.connect((self.blocks_null_source_0, 0), (self.blocks_float_to_complex_0, 1))
         self.connect((self.blocks_repeat_1, 0), (self.blocks_float_to_complex_0, 0))
-        self.connect((self.blocks_throttle2_0, 0), (self.blocks_multiply_const_vxx_0, 0))
 
 
     def closeEvent(self, event):
@@ -176,7 +174,6 @@ class AM_transmit_SDR(gr.top_block, Qt.QWidget):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.analog_sig_source_x_1.set_sampling_freq(self.samp_rate)
-        self.blocks_throttle2_0.set_sample_rate(self.samp_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
         self.soapy_hackrf_sink_0.set_sample_rate(0, self.samp_rate)
 
