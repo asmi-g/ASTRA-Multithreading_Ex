@@ -138,7 +138,7 @@ class AM_transmit_SDR(gr.top_block, Qt.QWidget):
         self.blocks_null_source_0 = blocks.null_source(gr.sizeof_float*1)
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(0.8)
         self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
-        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, 'Data/txdata-mod', False)
+        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, 'Data/txdata-mod.dat', False)
         self.blocks_file_sink_0.set_unbuffered(True)
         self.blocks_add_const_vxx_0 = blocks.add_const_ff(1)
         self._audio_gain_range = qtgui.Range(0, 10.0, 0.1, 0.8, 200)
